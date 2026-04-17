@@ -5,6 +5,7 @@ from chess.core.pieces.bishop import Bishop
 from chess.core.pieces.rook import Rook
 from chess.core.pieces.queen import Queen
 from chess.core.pieces.king import King
+from chess.core.pieces.knight import Knight
 
 
 # ---------------------------------------------------------------------------
@@ -247,6 +248,20 @@ class TestKing:
     def test_primary_castle_flag(self):
         assert King(datatypes.Color.WHITE).primaryCastlePiece is False  # não setado ainda
 
+# ---------------------------------------------------------------------------
+# Knight
+# ---------------------------------------------------------------------------
+
+class TestKnight:
+    def test_center_has_8_moves(self):
+        b = empty_board()
+        sq = place(b, 3, 3, Knight(datatypes.Color.WHITE))
+        assert len(b.getMovesAt(sq)) == 8
+    
+    def test_corner_has_3_moves(self):
+        b = empty_board()
+        sq = place(b, 0, 0, Knight(datatypes.Color.WHITE))
+        assert len(b.getMovesAt(sq)) == 2
 
 # ---------------------------------------------------------------------------
 # Datatypes
