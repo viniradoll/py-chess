@@ -19,6 +19,11 @@ class Piece(ABC):
     def getMoveList(self, board: board.BoardView, from_sq: datatypes.Square) -> list[datatypes.Move]:
         return []
 
+    def __eq__(self, other: object):
+        if not isinstance(other, Piece):
+            return False
+        return self.__class__ == other.__class__ and self.color == other.color
+
 class SlidingPiece(Piece):
     def __init__(self, color: datatypes.Color):
         super().__init__(color)

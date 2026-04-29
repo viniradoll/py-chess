@@ -1,3 +1,4 @@
+from chess.core.datatypes.square import Square
 from .view import BoardView
 from .position import Position
 from abc import ABC, abstractmethod
@@ -12,7 +13,7 @@ class Board(BoardView, ABC):
     def initialize(self):
         pass
 
-    def setupStartingPosition(self, position: Position):
+    def setupStartingPosition(self, position: Position = Position()):
         for square, piece in position.pieces:
             self.setPieceAt(square, piece=piece)
 
@@ -44,3 +45,24 @@ class Board(BoardView, ABC):
             raise ValueError(f"Square is not inbound row: '{sq.row}' col: '{sq.col}'")
         piece = self.getPieceAt(sq)
         return piece is not None and piece.color != color
+    
+    def __repr__(self):
+        rows: list[str] = []
+        for i in range(self.size-1,-1,-1):
+            row: list[str] = []
+            for j in range(self.size):
+                piece = self.getPieceAt(Square(i, j))
+                
+                if piece is None:
+                    row.append(".")
+                else:
+                    symbol = piece.__class__.__name__[0]
+                    
+                    if piece.color.name == "WHITE":
+                        row.append(symbol.upper())
+                    else:
+                        row.append(symbol.lower())
+
+            rows.append(" ".join(row))
+
+        return "\n".join(rows)
