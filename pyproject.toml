@@ -3,7 +3,6 @@ name = "chess"
 version = "0.1.0"
 requires-python = ">=3.13"
 dependencies = [
-    "windows-curses>=2.4.1",
 ]
 
 [dependency-groups]
