@@ -1,8 +1,9 @@
 import chess.core.board as board
 
+
 def main():
     b = board.MatrixBoard()
-    b.setupStartingPosition()
+    b.setup_starting_position()
     print(b)
 
 

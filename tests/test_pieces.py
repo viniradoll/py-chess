@@ -12,29 +12,33 @@ from chess.core.pieces.knight import Knight
 # Helpers
 # ---------------------------------------------------------------------------
 
+
 def empty_board() -> board.MatrixBoard:
     return board.MatrixBoard()
 
 
-def place(b: board.MatrixBoard, row: int, col: int, piece: pieces.Piece) -> datatypes.Square:
+def place(
+    b: board.MatrixBoard, row: int, col: int, piece: pieces.Piece
+) -> datatypes.Square:
     sq = datatypes.Square(row, col)
-    b.setPieceAt(sq, piece)
+    b.set_piece_at(sq, piece)
     return sq
 
 
 def moves_to(b: board.MatrixBoard, sq: datatypes.Square) -> set[tuple[int, int]]:
-    return {(m.to_sq.row, m.to_sq.col) for m in b.getMovesAt(sq)}
+    return {(m.to_sq.row, m.to_sq.col) for m in b.get_moves_at(sq)}
 
 
 # ---------------------------------------------------------------------------
 # Pawn
 # ---------------------------------------------------------------------------
 
+
 class TestPawn:
     def test_returns_list(self):
         b = empty_board()
         sq = place(b, 1, 4, pieces.Pawn(datatypes.Color.WHITE))
-        assert isinstance(b.getMovesAt(sq), list)
+        assert isinstance(b.get_moves_at(sq), list)
 
     def test_first_move_two_squares(self):
         b = empty_board()
@@ -47,7 +51,7 @@ class TestPawn:
     def test_after_moved_only_one_square(self):
         b = empty_board()
         pawn = pieces.Pawn(datatypes.Color.WHITE)
-        pawn.hasMoved = True
+        pawn.has_moved = True
         sq = place(b, 3, 4, pawn)
         destinations = moves_to(b, sq)
         assert (4, 4) in destinations
@@ -78,35 +82,37 @@ class TestPawn:
         b = empty_board()
         sq = place(b, 0, 0, pieces.Pawn(datatypes.Color.WHITE))
         # deve funcionar sem levantar exceção
-        result = b.getMovesAt(sq)
+        result = b.get_moves_at(sq)
         assert isinstance(result, list)
 
     def test_can_promote_flag(self):
-        assert pieces.Pawn(datatypes.Color.WHITE).canPromote is True
+        assert pieces.Pawn(datatypes.Color.WHITE).can_promote is True
 
 
 # ---------------------------------------------------------------------------
 # SlidingPiece genérica
 # ---------------------------------------------------------------------------
 
+
 class TestSlidingPiece:
     def _make_sliding(self, directions):
         class Generic(pieces.SlidingPiece):
             def directions(self):
                 return directions
+
         return Generic
 
     def test_single_direction_full_range(self):
-        Cls = self._make_sliding([(1, 0)])
+        cls = self._make_sliding([(1, 0)])
         b = empty_board()
-        sq = place(b, 1, 0, Cls(datatypes.Color.WHITE))
-        result = b.getMovesAt(sq)
+        sq = place(b, 1, 0, cls(datatypes.Color.WHITE))
+        result = b.get_moves_at(sq)
         assert len(result) == 6  # linhas 2..7
 
     def test_stops_at_ally(self):
-        Cls = self._make_sliding([(1, 0)])
+        cls = self._make_sliding([(1, 0)])
         b = empty_board()
-        sq = place(b, 1, 0, Cls(datatypes.Color.WHITE))
+        sq = place(b, 1, 0, cls(datatypes.Color.WHITE))
         place(b, 4, 0, pieces.Pawn(datatypes.Color.WHITE))
         destinations = moves_to(b, sq)
         # pode ir até linha 3, mas não 4 nem além
@@ -115,29 +121,29 @@ class TestSlidingPiece:
         assert (5, 0) not in destinations
 
     def test_captures_enemy_and_stops(self):
-        Cls = self._make_sliding([(1, 0)])
+        cls = self._make_sliding([(1, 0)])
         b = empty_board()
-        sq = place(b, 1, 0, Cls(datatypes.Color.WHITE))
+        sq = place(b, 1, 0, cls(datatypes.Color.WHITE))
         place(b, 4, 0, pieces.Pawn(datatypes.Color.BLACK))
         destinations = moves_to(b, sq)
-        assert (4, 0) in destinations   # captura
+        assert (4, 0) in destinations  # captura
         assert (5, 0) not in destinations  # não passa
 
     def test_diagonal_direction(self):
-        Cls = self._make_sliding([(1, 1), (-1, -1)])
+        cls = self._make_sliding([(1, 1), (-1, -1)])
         b = empty_board()
-        sq = place(b, 3, 3, Cls(datatypes.Color.WHITE))
-        result = b.getMovesAt(sq)
+        sq = place(b, 3, 3, cls(datatypes.Color.WHITE))
+        result = b.get_moves_at(sq)
         for move in result:
             # ambas as direções mantêm row == col
             assert move.to_sq.row == move.to_sq.col
             assert move.to_sq != sq
 
     def test_all_moves_reference_origin(self):
-        Cls = self._make_sliding([(0, 1)])
+        cls = self._make_sliding([(0, 1)])
         b = empty_board()
-        sq = place(b, 0, 0, Cls(datatypes.Color.WHITE))
-        for move in b.getMovesAt(sq):
+        sq = place(b, 0, 0, cls(datatypes.Color.WHITE))
+        for move in b.get_moves_at(sq):
             assert move.from_sq == sq
 
 
@@ -145,11 +151,12 @@ class TestSlidingPiece:
 # Bishop
 # ---------------------------------------------------------------------------
 
+
 class TestBishop:
     def test_moves_only_diagonals(self):
         b = empty_board()
         sq = place(b, 3, 3, Bishop(datatypes.Color.WHITE))
-        for move in b.getMovesAt(sq):
+        for move in b.get_moves_at(sq):
             dr = abs(move.to_sq.row - sq.row)
             dc = abs(move.to_sq.col - sq.col)
             assert dr == dc  # diagonal pura
@@ -157,23 +164,24 @@ class TestBishop:
     def test_center_has_13_moves(self):
         b = empty_board()
         sq = place(b, 3, 3, Bishop(datatypes.Color.WHITE))
-        assert len(b.getMovesAt(sq)) == 13
+        assert len(b.get_moves_at(sq)) == 13
 
     def test_corner_has_7_moves(self):
         b = empty_board()
         sq = place(b, 0, 0, Bishop(datatypes.Color.WHITE))
-        assert len(b.getMovesAt(sq)) == 7
+        assert len(b.get_moves_at(sq)) == 7
 
 
 # ---------------------------------------------------------------------------
 # Rook
 # ---------------------------------------------------------------------------
 
+
 class TestRook:
     def test_moves_only_straight(self):
         b = empty_board()
         sq = place(b, 3, 3, Rook(datatypes.Color.WHITE))
-        for move in b.getMovesAt(sq):
+        for move in b.get_moves_at(sq):
             dr = move.to_sq.row - sq.row
             dc = move.to_sq.col - sq.col
             assert dr == 0 or dc == 0  # linha ou coluna
@@ -181,48 +189,50 @@ class TestRook:
     def test_center_has_14_moves(self):
         b = empty_board()
         sq = place(b, 3, 3, Rook(datatypes.Color.WHITE))
-        assert len(b.getMovesAt(sq)) == 14
+        assert len(b.get_moves_at(sq)) == 14
 
     def test_secundary_castle_flag(self):
-        assert Rook(datatypes.Color.WHITE).secundaryCastlePiece is True
+        assert Rook(datatypes.Color.WHITE).secundary_castle_piece is True
 
 
 # ---------------------------------------------------------------------------
 # Queen
 # ---------------------------------------------------------------------------
 
+
 class TestQueen:
     def test_center_has_27_moves(self):
         b = empty_board()
         sq = place(b, 3, 3, Queen(datatypes.Color.WHITE))
-        assert len(b.getMovesAt(sq)) == 27
+        assert len(b.get_moves_at(sq)) == 27
 
     def test_moves_include_all_directions(self):
         b = empty_board()
         sq = place(b, 3, 3, Queen(datatypes.Color.WHITE))
         destinations = moves_to(b, sq)
-        assert (3, 7) in destinations   # horizontal direita
-        assert (3, 0) in destinations   # horizontal esquerda
-        assert (7, 3) in destinations   # vertical acima
-        assert (0, 3) in destinations   # vertical abaixo
-        assert (7, 7) in destinations   # diagonal NE
-        assert (0, 0) in destinations   # diagonal SW
+        assert (3, 7) in destinations  # horizontal direita
+        assert (3, 0) in destinations  # horizontal esquerda
+        assert (7, 3) in destinations  # vertical acima
+        assert (0, 3) in destinations  # vertical abaixo
+        assert (7, 7) in destinations  # diagonal NE
+        assert (0, 0) in destinations  # diagonal SW
 
 
 # ---------------------------------------------------------------------------
 # King
 # ---------------------------------------------------------------------------
 
+
 class TestKing:
     def test_center_has_8_moves(self):
         b = empty_board()
         sq = place(b, 3, 3, King(datatypes.Color.WHITE))
-        assert len(b.getMovesAt(sq)) == 8
+        assert len(b.get_moves_at(sq)) == 8
 
     def test_corner_has_3_moves(self):
         b = empty_board()
         sq = place(b, 0, 0, King(datatypes.Color.WHITE))
-        assert len(b.getMovesAt(sq)) == 3
+        assert len(b.get_moves_at(sq)) == 3
 
     def test_cannot_move_to_ally(self):
         b = empty_board()
@@ -241,31 +251,37 @@ class TestKing:
     def test_all_moves_one_step(self):
         b = empty_board()
         sq = place(b, 3, 3, King(datatypes.Color.WHITE))
-        for move in b.getMovesAt(sq):
+        for move in b.get_moves_at(sq):
             assert abs(move.to_sq.row - sq.row) <= 1
             assert abs(move.to_sq.col - sq.col) <= 1
 
     def test_primary_castle_flag(self):
-        assert King(datatypes.Color.WHITE).primaryCastlePiece is False  # não setado ainda
+        assert (
+            King(datatypes.Color.WHITE).primary_castle_piece is False
+        )  # não setado ainda
+
 
 # ---------------------------------------------------------------------------
 # Knight
 # ---------------------------------------------------------------------------
 
+
 class TestKnight:
     def test_center_has_8_moves(self):
         b = empty_board()
         sq = place(b, 3, 3, Knight(datatypes.Color.WHITE))
-        assert len(b.getMovesAt(sq)) == 8
-    
+        assert len(b.get_moves_at(sq)) == 8
+
     def test_corner_has_3_moves(self):
         b = empty_board()
         sq = place(b, 0, 0, Knight(datatypes.Color.WHITE))
-        assert len(b.getMovesAt(sq)) == 2
+        assert len(b.get_moves_at(sq)) == 2
+
 
 # ---------------------------------------------------------------------------
 # Datatypes
 # ---------------------------------------------------------------------------
+
 
 class TestDatatypes:
     def test_colors_are_distinct(self):

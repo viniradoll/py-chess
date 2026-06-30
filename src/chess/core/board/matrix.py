@@ -12,12 +12,12 @@ class MatrixBoard(Board):
         for i in range(self.size):
             self.grid.append([None] * self.size)
 
-    def getPieceAt(self, sq: datatypes.Square) -> pieces.Piece | None:
-        if not self.isInbound(sq):
+    def get_piece_at(self, sq: datatypes.Square) -> pieces.Piece | None:
+        if not self.is_inbound(sq):
             raise ValueError(f"Square is not inbound row: '{sq.row}' col: '{sq.col}'")
         return self.grid[sq.row][sq.col]
 
-    def setPieceAt(self,sq:datatypes.Square, piece: pieces.Piece):
-        if not self.isInbound(sq):
+    def set_piece_at(self,sq:datatypes.Square, piece: pieces.Piece | None):
+        if not self.is_inbound(sq):
             raise ValueError(f"Square is not inbound row: '{sq.row}' col: '{sq.col}'")
         self.grid[sq.row][sq.col] = piece
