@@ -2,6 +2,7 @@
 import chess.core.board as board
 import chess.core.datatypes as datatypes
 import chess.core.pieces as pieces
+from chess.io.fen import FenParser
 
 
 def test_starting_position():
@@ -11,6 +12,6 @@ def test_starting_position():
 
 
 def test_fen_parsing():
-    board.FenParser.parse_fen(
+    FenParser.parse_fen(
         "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
     )
