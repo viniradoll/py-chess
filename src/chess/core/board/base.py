@@ -14,7 +14,9 @@ class Board(BoardView, ABC):
     @abstractmethod
     def initialize(self): ...
 
-    def setup_starting_position(self, position: Position = Position()):
+    def setup_starting_position(self, position: Position | None = None):
+        if position is None:
+            position = Position()
         for square, piece in position.pieces:
             self.set_piece_at(square, piece=piece)
 
@@ -72,3 +74,10 @@ class Board(BoardView, ABC):
             rows.append(" ".join(row))
 
         return "\n".join(rows)
+
+    def __iter__(self):
+        for i in range(self.size):
+            for j in range(self.size):
+                piece = self.get_piece_at(datatypes.Square(i, j))
+                if piece is not None:
+                    yield piece

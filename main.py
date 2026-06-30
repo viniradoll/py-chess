@@ -1,10 +1,12 @@
-import chess.core.board as board
+from chess.core.pieces import Piece
+from chess.core.board import MatrixBoard
 
 
 def main():
-    b = board.MatrixBoard()
+    b = MatrixBoard()
     b.setup_starting_position()
-    print(b)
+    for p in b:
+        print(p.color)
 
 
 if __name__ == "__main__":

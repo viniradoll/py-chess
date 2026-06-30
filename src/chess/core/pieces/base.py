@@ -1,6 +1,12 @@
+from __future__ import annotations
+
 from abc import ABC, abstractmethod
+from typing import TYPE_CHECKING
+
 import chess.core.datatypes as datatypes
-import chess.core.board as board
+
+if TYPE_CHECKING:
+    from chess.core.board import BoardView
 
 
 class Piece(ABC):
@@ -18,7 +24,7 @@ class Piece(ABC):
 
     @abstractmethod
     def get_move_list(
-        self, board: board.BoardView, from_sq: datatypes.Square
+        self, board: BoardView, from_sq: datatypes.Square
     ) -> list[datatypes.Move]: ...
 
     def __eq__(self, other: object):
@@ -35,7 +41,7 @@ class SlidingPiece(Piece):
     def directions(self) -> list[tuple[int, int]]: ...
 
     def get_move_list(
-        self, board: board.BoardView, from_sq: datatypes.Square
+        self, board: BoardView, from_sq: datatypes.Square
     ) -> list[datatypes.Move]:
         move_list = []
         for direction in self.directions():
