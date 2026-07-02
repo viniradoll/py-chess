@@ -1,10 +1,10 @@
 from __future__ import annotations
+from dataclasses import dataclass
 
-
+@dataclass(frozen=True)
 class Square:
-    def __init__(self, row, col):
-        self.row: int = row
-        self.col: int = col
+    row: int
+    col: int
 
     @classmethod
     def from_algebraic(cls, algebraic: str) -> Square:
@@ -27,9 +27,13 @@ class Square:
         return f"{col_char}{row_char}"
 
     def __repr__(self):
-        return str({"row": self.row, "col": self.col})
+        return self.to_algebraic()
+        #return str({"row": self.row, "col": self.col})
 
     def __eq__(self, other: object):
         if not isinstance(other, Square):
             return False
         return self.row == other.row and self.col == other.col
+    
+    def __hash__(self):
+        return hash((self.row, self.col))

@@ -1,9 +1,9 @@
-from chess.core.datatypes.move import Move
-from chess.core.datatypes.square import Square
+from chess.core.pieces import Piece
+from typing import Iterator, Tuple, Set
+from chess.core.datatypes import Move, Square, Color
 from .view import BoardView
 from .position import Position
 from abc import ABC, abstractmethod
-import chess.core.datatypes as datatypes
 import chess.core.pieces as pieces
 
 
@@ -21,38 +21,35 @@ class Board(BoardView, ABC):
             self.set_piece_at(square, piece=piece)
 
     @abstractmethod
-    def get_piece_at(self, sq: datatypes.Square) -> pieces.Piece | None: ...
+    def get_piece_at(self, sq: Square) -> pieces.Piece | None: ...
 
     @abstractmethod
-    def set_piece_at(self, sq: datatypes.Square, piece: pieces.Piece | None): ...
+    def set_piece_at(self, sq: Square, piece: pieces.Piece | None): ...
 
     def move_piece(self, move: Move):
         piece = self.get_piece_at(move.from_sq)
         if not piece:
             raise ValueError("No piece in this square")
+        piece.has_moved = True
         self.set_piece_at(move.to_sq, piece)
         self.set_piece_at(move.from_sq, None)
 
-    def get_moves_at(self, sq: datatypes.Square) -> list[datatypes.Move]:
+    def get_moves_at(self, sq: Square) -> list[Move]:
         piece = self.get_piece_at(sq)
         if piece is None:
             return []
         return piece.get_move_list(board=self, from_sq=sq)
 
-    def get_color_at(self, sq: datatypes.Square) -> datatypes.Color | None:
+    def get_color_at(self, sq: Square) -> Color | None:
         piece = self.get_piece_at(sq)
         return None if piece is None else piece.color
 
-    def is_empty(self, sq: datatypes.Square) -> bool:
-        if not self.is_inbound(sq):
-            raise ValueError(f"Square is not inbound row: '{sq.row}' col: '{sq.col}'")
-        return True if self.get_piece_at(sq) is None else False
-
-    def is_enemy(self, sq: datatypes.Square, color: datatypes.Color) -> bool:
-        if not self.is_inbound(sq):
-            raise ValueError(f"Square is not inbound row: '{sq.row}' col: '{sq.col}'")
-        piece = self.get_piece_at(sq)
-        return piece is not None and piece.color != color
+    def get_seen_squares(self, color) -> Set[Square]:
+        seen_squares: Set[Square] = set()
+        for piece, sq in self:
+            if piece.color == color:
+                seen_squares.update(piece.get_seen_squares(self, sq))
+        return seen_squares
 
     def __repr__(self):
         rows: list[str] = []
@@ -75,9 +72,9 @@ class Board(BoardView, ABC):
 
         return "\n".join(rows)
 
-    def __iter__(self):
+    def __iter__(self) -> Iterator[Tuple[Piece, Square]]:
         for i in range(self.size):
             for j in range(self.size):
-                piece = self.get_piece_at(datatypes.Square(i, j))
+                piece = self.get_piece_at(Square(i, j))
                 if piece is not None:
-                    yield piece
+                    yield piece, Square(i,j)

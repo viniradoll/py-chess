@@ -1,3 +1,4 @@
+from socket import fromfd
 from chess.core.datatypes.square import Square
 
 
@@ -11,3 +12,8 @@ class Move:
 
     def __repr__(self):
         return str({"from_sq": self.from_sq, "to_sq": self.to_sq})
+    
+    def __eq__(self, other: object):
+        if not isinstance(other, Move):
+            return False
+        return self.from_sq == other.from_sq and self.to_sq == other.to_sq

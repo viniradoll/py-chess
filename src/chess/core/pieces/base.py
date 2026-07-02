@@ -1,10 +1,7 @@
 from __future__ import annotations
-
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING
-
-import chess.core.datatypes as datatypes
-
+from chess.core.datatypes import Square, Move, Color
 if TYPE_CHECKING:
     from chess.core.board import BoardView
 
@@ -19,13 +16,18 @@ class Piece(ABC):
     # If piece can help a piece Castle (e.g. Rook)
     secundary_castle_piece: bool = False
 
-    def __init__(self, color: datatypes.Color):
+    def __init__(self, color: Color):
         self.color = color
 
     @abstractmethod
-    def get_move_list(
-        self, board: BoardView, from_sq: datatypes.Square
-    ) -> list[datatypes.Move]: ...
+    def get_seen_squares(self, board: BoardView, from_sq: Square) -> list[Square]:
+        ...
+
+    def get_move_list(self, board: BoardView, from_sq: Square) -> list[Move]: 
+        moves: list[Move] = []
+        for square in self.get_seen_squares(board,from_sq):
+            moves.append(Move(from_sq, square))
+        return moves
 
     def __eq__(self, other: object):
         if not isinstance(other, Piece):
@@ -34,31 +36,29 @@ class Piece(ABC):
 
 
 class SlidingPiece(Piece):
-    def __init__(self, color: datatypes.Color):
+    def __init__(self, color: Color):
         super().__init__(color)
 
     @abstractmethod
     def directions(self) -> list[tuple[int, int]]: ...
 
-    def get_move_list(
-        self, board: BoardView, from_sq: datatypes.Square
-    ) -> list[datatypes.Move]:
-        move_list = []
+    def get_seen_squares(self, board: BoardView, from_sq: Square) -> list[Square]:
+        seen_squares = []
         for direction in self.directions():
             distance = 1
             row, col = direction
-            new_square = datatypes.Square(
+            new_square = Square(
                 from_sq.row + (distance * row), from_sq.col + (distance * col)
             )
             while board.is_available(new_square):
-                move_list.append(datatypes.Move(from_sq, to_sq=new_square))
+                seen_squares.append(new_square)
                 distance += 1
-                new_square = datatypes.Square(
+                new_square = Square(
                     from_sq.row + (distance * row), from_sq.col + (distance * col)
                 )
             if board.is_capturable(new_square, self.color):
-                move_list.append(datatypes.Move(from_sq, to_sq=new_square))
+                seen_squares.append(new_square)
 
             distance = 1
 
-        return move_list
+        return seen_squares
