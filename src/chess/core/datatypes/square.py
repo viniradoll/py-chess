@@ -28,7 +28,6 @@ class Square:
 
     def __repr__(self):
         return self.to_algebraic()
-        #return str({"row": self.row, "col": self.col})
 
     def __eq__(self, other: object):
         if not isinstance(other, Square):
