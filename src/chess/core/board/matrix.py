@@ -10,7 +10,7 @@ class MatrixBoard(Board):
         self.initialize()
 
     def initialize(self):
-        for i in range(self.size):
+        for _ in range(self.size):
             self.grid.append([None] * self.size)
 
     def get_piece_at(self, sq: datatypes.Square) -> pieces.Piece | None:

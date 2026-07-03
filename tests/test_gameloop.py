@@ -19,8 +19,7 @@ def board(empty_board: MatrixBoard) -> MatrixBoard:
 
 @fixture
 def game(board: MatrixBoard) -> Game:
-    g = Game(board)
-    return g
+    return Game(board)
 
 def test_make_move(game: Game):
     game.make_move("e2", "e4")
@@ -78,7 +77,7 @@ class TestMoveValidation:
         with pytest.raises(ValueError):
             game.make_move("d2", "d4")
 
-class TestCheck():
+class TestCheck:
     def test_not_in_check(self,game: Game):
         assert not game.is_in_check(Color.WHITE)
         assert not game.is_in_check(Color.BLACK)

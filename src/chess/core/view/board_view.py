@@ -1,4 +1,4 @@
-from abc import ABC, abstractmethod
+from abc import ABC,abstractmethod
 import chess.core.datatypes as datatypes
 
 
@@ -15,7 +15,7 @@ class BoardView(ABC):
     def is_empty(self, sq: datatypes.Square) -> bool:
         if not self.is_inbound(sq):
             raise ValueError(f"Square is not inbound row: '{sq.row}' col: '{sq.col}'")
-        return True if self.get_color_at(sq) is None else False
+        return self.get_color_at(sq) is None
 
     def is_enemy(self, sq: datatypes.Square, color: datatypes.Color) -> bool:
         if not self.is_inbound(sq):

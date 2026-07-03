@@ -1,4 +1,3 @@
-from socket import fromfd
 from chess.core.datatypes.square import Square
 
 

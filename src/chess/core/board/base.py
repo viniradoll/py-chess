@@ -1,7 +1,8 @@
 from chess.core.pieces import Piece
-from typing import Iterator, Tuple, Set
+from typing import Tuple, Set
+from collections.abc import Iterator
 from chess.core.datatypes import Move, Square, Color
-from .view import BoardView
+from chess.core.view.board_view import BoardView
 from .position import Position
 from abc import ABC, abstractmethod
 import chess.core.pieces as pieces
@@ -55,6 +56,7 @@ class Board(BoardView, ABC):
         for piece, sq in self:
             if piece.primary_castle_piece and piece.color == color:
                 return sq
+        return None
 
     def __repr__(self):
         rows: list[str] = []

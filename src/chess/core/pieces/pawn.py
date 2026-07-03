@@ -1,6 +1,6 @@
 from .base import Piece
 from chess.core.datatypes import Square, Move, Color
-from chess.core.board import BoardView
+from chess.core.view.board_view import BoardView
 
 
 class Pawn(Piece):

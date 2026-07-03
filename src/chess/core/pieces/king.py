@@ -1,6 +1,6 @@
 from chess.core.pieces import Piece
-from chess.core.datatypes import Square, Move
-from chess.core.board import BoardView
+from chess.core.datatypes import Square
+from chess.core.view.board_view import BoardView
 
 
 class King(Piece):

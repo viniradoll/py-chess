@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import chess.core.pieces as pieces
-import chess.core.datatypes as datatypes
 
 
 class Position:

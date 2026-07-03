@@ -1,5 +1,4 @@
 from chess.core.board.base import Board
-from socket import fromfd
 from chess.core.datatypes import Color, Square, Move
 from chess.core.board.matrix import MatrixBoard
 import pytest

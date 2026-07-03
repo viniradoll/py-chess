@@ -17,6 +17,7 @@ class Game:
         self.board.move_piece(move)
 
         self.turn = ~self.turn
+        return True
 
     def validate_move(self, move: Move) -> bool:
         if move not in self.get_all_moves(self.turn):
@@ -27,7 +28,8 @@ class Game:
     def get_all_moves(self, color: Color) -> set[Move]:
         moves = set()
         for piece, square in self.board:
-            if piece.color != color: continue
+            if piece.color != color: 
+                continue
             moves.update(self.board.get_moves_at(square))
         return moves
 

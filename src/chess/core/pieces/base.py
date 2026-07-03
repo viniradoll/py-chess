@@ -1,9 +1,7 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING
 from chess.core.datatypes import Square, Move, Color
-if TYPE_CHECKING:
-    from chess.core.board import BoardView
+from chess.core.view.board_view import BoardView
 
 
 class Piece(ABC):
@@ -58,7 +56,8 @@ class SlidingPiece(Piece):
                 new_square = Square(
                     from_sq.row + (distance * row), from_sq.col + (distance * col)
                 )
-            seen_squares.append(new_square)
+            if board.is_inbound(new_square):
+                seen_squares.append(new_square)
 
             distance = 1
 
