@@ -1,3 +1,4 @@
+from chess.core.board.base import Board
 from socket import fromfd
 from chess.core.datatypes import Color, Square, Move
 from chess.core.board.matrix import MatrixBoard
@@ -14,6 +15,11 @@ import chess.core.pieces as pieces
 def empty_board() -> board.MatrixBoard:
     return board.MatrixBoard()
 
+@pytest.fixture
+def default_board():
+    b = MatrixBoard()
+    b.setup_starting_position()
+    return b
 
 def board_with_pawn(
     row: int, col: int, color=Color.WHITE
@@ -214,3 +220,7 @@ class TestSeenSquares:
     def test_seen_squares_starting_pos(self,seen_white):
         seen = ["b1","b3","c2","f1","e1","d1","d3","f3","c1"]
         assert all(Square.from_algebraic(pos) in seen_white for pos in seen)
+
+    def test_king_position(self, default_board: Board):
+        assert default_board.get_king_position(Color.WHITE) == Square.from_algebraic("e1")
+        assert default_board.get_king_position(Color.BLACK) == Square.from_algebraic("e8")

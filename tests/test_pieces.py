@@ -257,8 +257,8 @@ class TestKing:
 
     def test_primary_castle_flag(self):
         assert (
-            King(datatypes.Color.WHITE).primary_castle_piece is False
-        )  # não setado ainda
+            King(datatypes.Color.WHITE).primary_castle_piece is True
+        ) 
 
 
 # ---------------------------------------------------------------------------

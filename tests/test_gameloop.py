@@ -77,3 +77,14 @@ class TestMoveValidation:
         game.make_move(W, "c2", "c4")
         with pytest.raises(ValueError):
             game.make_move(W, "d2", "d4")
+
+class TestCheck():
+    def test_not_in_check(self,game: Game):
+        assert not game.is_in_check(Color.WHITE)
+        assert not game.is_in_check(Color.BLACK)
+
+    def test_is_in_check(self,game: Game):
+        game.board.move_piece(Move(Square.from_algebraic("e1"), Square.from_algebraic("c6")))
+        game.board.move_piece(Move(Square.from_algebraic("e8"), Square.from_algebraic("d3")))
+        assert game.is_in_check(Color.WHITE)
+        assert game.is_in_check(Color.BLACK)
