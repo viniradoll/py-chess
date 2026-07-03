@@ -1,7 +1,7 @@
 import pytest
 from chess.core.pieces import Pawn, Knight
 from chess.core.datatypes import Color, Square, Move
-from chess.core.game import Game
+from chess.core.gameloop.game import Game
 from pytest import fixture
 from chess.core.board import MatrixBoard
 
@@ -23,7 +23,7 @@ def game(board: MatrixBoard) -> Game:
     return g
 
 def test_make_move(game: Game):
-    game.make_move(W, "e2", "e4")
+    game.make_move("e2", "e4")
     assert game.board.get_piece_at(Square.from_algebraic("e2")) is None
     assert game.board.get_piece_at(Square.from_algebraic("e4")) == Pawn(W)
 
@@ -48,35 +48,35 @@ class TestAllMoves:
 
 class TestMoveValidation:
     def test_valid_pawn_move(self,game: Game):
-        game.make_move(W, "e2", "e4")
+        game.make_move("e2", "e4")
 
     def test_valid_horse_move(self,game: Game):
-        game.make_move(W, "b1", "c3")
+        game.make_move("b1", "c3")
 
     def test_valid_move_sequence(self,game: Game):
-        game.make_move(W, "e2", "e4")
-        game.make_move(B, "b8", "c6")
-        game.make_move(W, "d2", "d4")
+        game.make_move("e2", "e4")
+        game.make_move("b8", "c6")
+        game.make_move("d2", "d4")
         assert game.board.get_piece_at(Square.from_algebraic("d4")) == Pawn(W)
-        game.make_move(B, "c6", "d4")
+        game.make_move("c6", "d4")
         assert game.board.get_piece_at(Square.from_algebraic("d4")) == Knight(B)
 
     def test_invalid_pawn_move(self,game: Game):
         with pytest.raises(ValueError):
-            game.make_move(W, "e2", "d4")
+            game.make_move("e2", "d4")
 
     def test_move_to_occupied_square(self,game: Game):
-        game.make_move(W, "c2", "c4")
-        game.make_move(B, "b8", "c6")
-        game.make_move(W, "c4", "c5")
-        game.make_move(B, "a7", "a6")
+        game.make_move("c2", "c4")
+        game.make_move("b8", "c6")
+        game.make_move("c4", "c5")
+        game.make_move("a7", "a6")
         with pytest.raises(ValueError):
-            game.make_move(W, "c5", "c6")
+            game.make_move("c5", "c6")
     
     def test_two_moves_in_sequence(self,game: Game):
-        game.make_move(W, "c2", "c4")
+        game.make_move("c2", "c4")
         with pytest.raises(ValueError):
-            game.make_move(W, "d2", "d4")
+            game.make_move("d2", "d4")
 
 class TestCheck():
     def test_not_in_check(self,game: Game):

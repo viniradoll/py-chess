@@ -17,3 +17,6 @@ class Move:
         if not isinstance(other, Move):
             return False
         return self.from_sq == other.from_sq and self.to_sq == other.to_sq
+    
+    def __hash__(self):
+        return hash((self.from_sq, self.to_sq))

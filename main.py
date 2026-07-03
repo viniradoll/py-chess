@@ -1,5 +1,5 @@
 from chess.core.datatypes import Color, Square, Move
-from chess.core.game import Game
+from chess.core.gameloop.game import Game
 from chess.core.pieces import Piece, King, Pawn
 from chess.core.board import MatrixBoard
 
