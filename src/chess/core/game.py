@@ -15,7 +15,7 @@ class Game:
         
         self.board.move_piece(move)
 
-        self.turn = Color.WHITE if self.turn == Color.BLACK else Color.BLACK
+        self.turn = ~self.turn
 
     def _validate_move(self, move: Move, color: Color) -> bool:
         if color != self.turn:
@@ -29,6 +29,12 @@ class Game:
             raise ValueError(f"Invalid move {move}")
 
         return True
+    
+    def is_in_check(self, color: Color) -> bool:
+        king_position = self.board.get_king_position(color)
+        if king_position is None:
+            raise ValueError("No king?")
+        return king_position in self.board.get_seen_squares(~color)
 
     def get_all_moves(self, color: Color) -> list[Move]:
         moves: list[Move] = []

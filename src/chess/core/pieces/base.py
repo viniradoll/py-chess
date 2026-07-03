@@ -26,6 +26,8 @@ class Piece(ABC):
     def get_move_list(self, board: BoardView, from_sq: Square) -> list[Move]: 
         moves: list[Move] = []
         for square in self.get_seen_squares(board,from_sq):
+            if not board.is_available(square) and not board.is_capturable(square, self.color):
+                    continue
             moves.append(Move(from_sq, square))
         return moves
 
@@ -56,8 +58,7 @@ class SlidingPiece(Piece):
                 new_square = Square(
                     from_sq.row + (distance * row), from_sq.col + (distance * col)
                 )
-            if board.is_capturable(new_square, self.color):
-                seen_squares.append(new_square)
+            seen_squares.append(new_square)
 
             distance = 1
 

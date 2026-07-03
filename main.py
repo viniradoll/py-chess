@@ -1,6 +1,6 @@
 from chess.core.datatypes import Color, Square, Move
 from chess.core.game import Game
-from chess.core.pieces import Piece
+from chess.core.pieces import Piece, King, Pawn
 from chess.core.board import MatrixBoard
 
 
@@ -17,8 +17,7 @@ def main():
             pass
 
 def test():
-    s = set([Square(1,2),Square(1,2)])
-    print(s)
+    print(~Color.WHITE)
 
 if __name__ == "__main__":
     test()

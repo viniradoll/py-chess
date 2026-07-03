@@ -11,12 +11,12 @@ class Pawn(Piece):
         seen_squares = []
 
         new_square = Square(from_sq.row + (1 * direction), from_sq.col + 1)
-        if board.is_capturable(new_square, self.color):
-            seen_squares.append(new_square)
+        if board.is_inbound(new_square):
+                    seen_squares.append(new_square)
 
         new_square = Square(from_sq.row + (1 * direction), from_sq.col - 1)
-        if board.is_capturable(new_square, self.color):
-            seen_squares.append(new_square)
+        if board.is_inbound(new_square):
+                    seen_squares.append(new_square)
         return seen_squares
 
     def get_move_list(self, board: BoardView, from_sq: Square) -> list[Move]:

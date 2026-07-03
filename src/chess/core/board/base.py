@@ -44,12 +44,17 @@ class Board(BoardView, ABC):
         piece = self.get_piece_at(sq)
         return None if piece is None else piece.color
 
-    def get_seen_squares(self, color) -> Set[Square]:
+    def get_seen_squares(self, color: Color) -> Set[Square]:
         seen_squares: Set[Square] = set()
         for piece, sq in self:
             if piece.color == color:
                 seen_squares.update(piece.get_seen_squares(self, sq))
         return seen_squares
+
+    def get_king_position(self, color: Color) -> Square | None:
+        for piece, sq in self:
+            if piece.primary_castle_piece and piece.color == color:
+                return sq
 
     def __repr__(self):
         rows: list[str] = []
