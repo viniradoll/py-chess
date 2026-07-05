@@ -10,7 +10,7 @@ import chess.core.pieces as pieces
 
 class Board(BoardView, ABC):
     def __init__(self, size: int):
-        self.size: int = size
+        super().__init__(size)
 
     @abstractmethod
     def initialize(self): ...

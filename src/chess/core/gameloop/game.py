@@ -1,11 +1,13 @@
+from chess.core.gameloop.move_maker import MoveMaker
 from chess.core.datatypes import Color, Move, Square
 from chess.core.board import Board, MatrixBoard
 
 
 class Game:
-    def __init__(self, board: Board | None = None):
+    def __init__(self, board: Board | None = None, move_maker: MoveMaker | None = None):
         self.board: Board = board if board is not None else MatrixBoard()
         self.board.setup_starting_position()
+        self.move_maker = move_maker if move_maker is not None else MoveMaker(self.board)
         self.turn: Color = Color.WHITE
 
     def make_move(self, from_sq: str, to_sq: str):
@@ -14,10 +16,14 @@ class Game:
         if not self.validate_move(move):
             return False
         
-        self.board.move_piece(move)
+        self.move_maker.make_move(move)
 
         self.turn = ~self.turn
         return True
+
+    def undo_move(self):
+        self.move_maker.undo_move()
+        self.turn = ~self.turn
 
     def validate_move(self, move: Move) -> bool:
         if move not in self.get_all_moves(self.turn):
