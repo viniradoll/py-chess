@@ -26,8 +26,8 @@ where = ["src"]
 [tool.ruff.lint]
 extend-select = [
     "N",    # pep8-naming
-    "B",    # bugbear (bugs comuns e pegadinhas)
+    "B",    # bugbear
     "SIM",  # simplificações
     "C4",   # comprehensions
-    "RET",  # consistência de return (ajudaria a pegar o caso do return morto!)
+    "RET",  # consistência de return
 ]
