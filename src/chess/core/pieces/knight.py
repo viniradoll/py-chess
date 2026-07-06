@@ -4,6 +4,7 @@ from chess.core.view.board_view import BoardView
 
 
 class Knight(Piece):
+    symbol = "N"
     def get_seen_squares(self, board: BoardView, from_sq: Square) -> list[Square]:
         seen_squares: list[Square] = []
         for i in [(-2, (-1, 1)), (-1, (-2, 2)), (1, (-2, 2)), (2, (-1, 1))]:

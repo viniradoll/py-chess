@@ -5,17 +5,20 @@ from chess.core.view.board_view import BoardView
 
 
 class Piece(ABC):
-    # Piece has already moved in this game
-    has_moved: bool = False
     # If piece can promote on the last rank (e.g. Pawn)
     can_promote: bool = False
     # If piece can Castle (e.g. King)
     primary_castle_piece: bool = False
     # If piece can help a piece Castle (e.g. Rook)
-    secundary_castle_piece: bool = False
+    secondary_castle_piece: bool = False
+    # Algebric Notation symnol
+    symbol: str
 
     def __init__(self, color: Color):
         self.color = color
+
+        # Piece has already moved in this game
+        self.has_moved: bool = False
 
     @abstractmethod
     def get_seen_squares(self, board: BoardView, from_sq: Square) -> list[Square]:

@@ -68,7 +68,7 @@ class Board(BoardView, ABC):
                 if piece is None:
                     row.append(".")
                 else:
-                    symbol = piece.__class__.__name__[0]
+                    symbol = piece.symbol
 
                     if piece.color.name == "WHITE":
                         row.append(symbol.upper())

@@ -4,6 +4,8 @@ from chess.core.view.board_view import BoardView
 
 
 class Pawn(Piece):
+    symbol = "P"
+
     can_promote = True
     
     def get_seen_squares(self, board: BoardView, from_sq: Square) -> list[Square]:

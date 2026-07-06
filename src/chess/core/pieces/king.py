@@ -4,6 +4,7 @@ from chess.core.view.board_view import BoardView
 
 
 class King(Piece):
+    symbol = "K"
     primary_castle_piece = True
 
     def get_seen_squares(self, board: BoardView, from_sq: Square) -> list[Square]:
